@@ -30,7 +30,7 @@ print("База после скидки:", base)
 print("НДС:", vat_amount)
 print("Итого к оплате:",total)
 ```
-![Картинка 3](/images/ex03_img.png/)
+![Картинка 3](/images/ex03_img.png)
 
 ### Задание 4
 ```python
