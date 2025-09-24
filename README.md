@@ -53,4 +53,4 @@ l=len(n)
 print("Инициалы:" , initials)
 print("Длина(символов):" , l)
 ```
-![Картинка 5](/scr/lab01/img/e05_img.png)
+![Картинка 5](/![ex05_img.png](scr/lab01/img/ex05_img.png))
