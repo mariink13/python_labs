@@ -39,7 +39,7 @@ h=m//60
 m1=m%60
 print(f"{h}:{m1:02d}")
 ```
-![Картинка 4](/scr/lab01/img/e04_img.png)
+![Картинка 4](/src/lab01/img/e04_img.png)
 
 ### Задание 5
 ```python
@@ -53,4 +53,4 @@ l=len(n)
 print("Инициалы:" , initials)
 print("Длина(символов):" , l)
 ```
-![Картинка 5](/![ex05_img.png](scr/lab01/img/ex05_img.png))
+![Картинка 5](/![ex05_img.png](src/lab01/img/ex05_img.png))
