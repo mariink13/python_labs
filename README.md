@@ -8,7 +8,7 @@ age=int(input("Возраст: "))
 
 print("Привет, " + name + "! Через год тебе будет " + str(age + 1) + ".")
 ```
-![Картинка 1](./src/lab01/img/ex01_img.png)
+![ex01](./img/lab01/ex01_img.png)
 
 ### Задание 2
 ```python
