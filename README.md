@@ -17,7 +17,7 @@ b = float(input('b: ').replace(',','.'))
 print(f"sum={round(a+b,2)}; avg={round((a+b)/2,2)}")
 ```
 
-![Картинка 2](/![Снимок экрана 2025-09-24 в 11.56.29.png](scr/lab01/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202025-09-24%20%D0%B2%2011.56.29.png))
+![ex02](./img/lab01/ex02_img.png)
 
 ### Задание 3
 ```python
@@ -31,7 +31,7 @@ print("База после скидки:", base)
 print("НДС:", vat_amount)
 print("Итого к оплате:",total)
 ```
-![Картинка 3](/images/ex03_img.png)
+![ex03](./img/lab01/ex03_img.png)
 
 ### Задание 4
 ```python
@@ -40,7 +40,7 @@ h=m//60
 m1=m%60
 print(f"{h}:{m1:02d}")
 ```
-![Картинка 4]()
+![ex04](./img/lab01/ex04_img.png)
 
 ### Задание 5
 ```python
@@ -54,4 +54,4 @@ l=len(n)
 print("Инициалы:" , initials)
 print("Длина(символов):" , l)
 ```
-![Картинка 5](/![ex05_img.png](src/lab01/img/ex05_img.png))
+![ex04](./img/lab01/ex05_img.png)
