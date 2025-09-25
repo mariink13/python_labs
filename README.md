@@ -8,7 +8,7 @@ age=int(input("Возраст: "))
 
 print("Привет, " + name + "! Через год тебе будет " + str(age + 1) + ".")
 ```
-![Картинка 1](/![ex01_img.png](scr/lab01/img/ex01_img.png)))
+![Картинка 1](./src/lab01/img/ex01_img.png)
 
 ### Задание 2
 ```python
@@ -16,6 +16,7 @@ a = float(input('a: ').replace(',','.'))
 b = float(input('b: ').replace(',','.'))
 print(f"sum={round(a+b,2)}; avg={round((a+b)/2,2)}")
 ```
+
 ![Картинка 2](/![Снимок экрана 2025-09-24 в 11.56.29.png](scr/lab01/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202025-09-24%20%D0%B2%2011.56.29.png))
 
 ### Задание 3
@@ -39,7 +40,7 @@ h=m//60
 m1=m%60
 print(f"{h}:{m1:02d}")
 ```
-![Картинка 4](/src/lab01/img/e04_img.png)
+![Картинка 4]()
 
 ### Задание 5
 ```python
