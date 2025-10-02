@@ -1,12 +1,7 @@
-n=str(input(("Введите фИО: ")))
-n=" ".join(n.split())
-p= n.split()
-if len(p)==3:
-    surname, name, patr = p
-initials=f"{surname[0]}{name[0]}{patr[0]}."
-l=len(n)
-print("Инициалы:" , initials)
-print("Длина(символов):" , l)
+sec, fir, thr = map(str, input("ФИО: ").split())
+print(f'Инициалы: {sec[0] + fir[0] + thr[0]}')
+print(f'Длина(символы): {2+len(fir) + len(thr) + len(sec)}')
+
 
 
 
