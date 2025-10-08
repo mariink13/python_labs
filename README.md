@@ -122,7 +122,7 @@ print(transpose([[1, 2], [3, 4]]))
 print(transpose([]))
 print(transpose([[1, 2], [3]]))
 ![ex04](./img/lab02/ex04_img.png)
-
+```
 ### Задание 5
 ```python
 def row_sums(mat: list[list[float | int]]):
@@ -139,6 +139,51 @@ print(row_sums([[1,2,3], [4,5,6]]))
 print(row_sums([[-1, 1], [10, -10]]))
 print(row_sums([[0,0], [0,0]]))
 print(row_sums([[1,2], [3]]))
-
 ```
 ![ex05](./img/lab02/ex05_img.png)
+
+### Задание 6
+```python
+def col_sums(mat: list[list[float | int]]):
+    if not mat:
+        return []
+    rows = len(mat)
+    cols = len(mat[0])
+    for row in mat:
+        if len(row) != cols:
+            raise ValueError
+    sums = [sum(mat[i][j] for i in range(rows)) for j in range(cols)]
+    return sums
+print(col_sums([[1, 2, 3], [4, 5, 6]]))
+print(col_sums([[-1, 1], [10, -10]]))
+print(col_sums([[0, 0], [0, 0]]))
+print(col_sums([[1, 2], [3]]))
+```
+![ex06](./img/lab02/ex06_img.png)
+
+### Задание 7
+```python
+def format_record(student: tuple[str, str, float]) -> str:
+    if len(student) != 3: 
+        raise ValueError("Не хватает данных")
+    if not (isinstance(student[0], str) and isinstance(student[1], str) and isinstance(student[2], float)): 
+        raise TypeError
+    fio_parts = student[0].split() 
+    if len(fio_parts) < 2:
+        raise ValueError("ФИО должно содержать фамилию и имя")
+    fio_parts = [part.strip() for part in fio_parts if part.strip()]
+    res = fio_parts[0].title() + " " + fio_parts[1][0].upper()
+    if len(fio_parts) == 3:
+        res += "." + fio_parts[2][0].upper() 
+        res += "., "  
+    res += " гр. " + student[1] + ", GPA " + f"{round(student[2],2):.2f}" 
+    return res 
+print(format_record(("Иванов Иван Иванович","BIVT-25",4.6)))
+print(format_record(("Петров Пётр", "IKBO-12", 5.0)))
+print(format_record(("Петров Пётр Петрович", "IKBO-12", 5.0)))
+print(format_record((" сидорова  анна   сергеевна ", "ABB-01", 3.999)))
+print(format_record(("Иванов Иван Иванович","BIVT-25")))
+```
+![ex07](./img/lab02/ex07_img.png)
+
+
