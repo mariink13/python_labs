@@ -121,6 +121,7 @@ print(transpose([[1], [2], [3]]))
 print(transpose([[1, 2], [3, 4]]))
 print(transpose([]))
 print(transpose([[1, 2], [3]]))
+```
 ![ex04](./img/lab02/ex04_img.png)
 ```
 ### Задание 5
