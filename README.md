@@ -83,6 +83,7 @@ print(unique_sorted([1.0, 1, 2.5, 2.5, 0]))
 
 ![ex02](./img/lab02/ex02_img.png)
 
+
 ### Задание 3
 ```python
 def flatten(mat: list[list | tuple]) -> list:
@@ -101,3 +102,43 @@ print(flatten([[1, 2], "ab"]))
 ```
 ![ex03](./img/lab02/ex03_img.png)
 
+### Задание 4
+```python
+def transpose(mat: list[list[float | int]]):
+    if not mat:
+        return []
+    rows=len(mat)
+    cols=len(mat[0])
+    for row in mat:
+        if len(row)!=cols:
+            raise ValueError 
+        
+    new_mat = [[mat[i][j] for i in range(rows)] for j in range(cols)]
+
+    return new_mat
+print(transpose([[1, 2, 3]]))
+print(transpose([[1], [2], [3]]))
+print(transpose([[1, 2], [3, 4]]))
+print(transpose([]))
+print(transpose([[1, 2], [3]]))
+![ex04](./img/lab02/ex04_img.png)
+
+### Задание 5
+```python
+def row_sums(mat: list[list[float | int]]):
+    if not mat:
+        return []
+    rows= len(mat)
+    cols= len(mat[0])
+    for row in mat:
+        if len(row)!=cols:
+            raise ValueError
+    sums=[sum(row) for row in mat]
+    return sums
+print(row_sums([[1,2,3], [4,5,6]]))
+print(row_sums([[-1, 1], [10, -10]]))
+print(row_sums([[0,0], [0,0]]))
+print(row_sums([[1,2], [3]]))
+
+```
+![ex05](./img/lab02/ex05_img.png)
