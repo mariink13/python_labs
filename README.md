@@ -123,7 +123,7 @@ print(transpose([]))
 print(transpose([[1, 2], [3]]))
 ```
 ![ex04](./img/lab02/ex04_img.png)
-```
+
 ### Задание 5
 ```python
 def row_sums(mat: list[list[float | int]]):
