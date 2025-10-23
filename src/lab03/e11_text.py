@@ -1,6 +1,6 @@
 
 import sys
-from lib.e11_tex_stats import normalize, tokenize, count_freq, top_n
+from lib.e11_text_stats import normalize, tokenize, count_freq, top_n
 def main():
     text = sys.stdin.buffer.read().decode('utf-8') #вход к бинарным данным,преобразует строку в юникод
     if not text.strip():
@@ -18,12 +18,9 @@ def main():
     unique_words = len(freq_dict) # количеситво уникальных слов 
     top_words = top_n(freq_dict, 5) # самые популярные частоты
     
-    print(f"Всего слов: {total_words}")
-    print(f"Уникальных слов: {unique_words}")
-    print("Топ-5:")
-    for word, count in top_words:
-        print(f"{word}: {count}")
-
+    
 
 if name == "__main__":  
     main()
+
+
