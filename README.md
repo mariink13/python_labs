@@ -78,7 +78,7 @@ def main(file: str, encoding: str = 'utf-8'):
 
 main(r'/Users/marinaujmanova/Desktop/python_labs/src/lab04/data/input.txt')
 ```
-![exB1](./img/lab04/exB1_img.png)
+![exb1](./img/lab04/exb1_img.png)
 ![exB2](./img/lab04/exB2_img.png)
 
 
