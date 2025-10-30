@@ -64,14 +64,14 @@ def main(file: str, encoding: str = 'utf-8'):
     norm = normalize(text)
     tokens = tokenize(norm)
     freq_dict = count_freq(tokens)
-    top = top_n(freq_dict, 5)
+    top = top_n(freq_dict)
     top_sort = sorted(top, key=lambda x: (x[1], x[0]), reverse=True)
     report_path = file_path.parent / 'report.csv'
     write_csv(top_sort, report_path, header=('word', 'count'))
     
     print(f'Всего слов: {len(tokens)}')
     print(f'Уникальных слов: {len(freq_dict)}')
-    print('Топ-5:')
+    print('Топ:')
     for cursor in top_sort:
         print(f'{cursor[0]}: {cursor[-1]}')
 
