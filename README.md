@@ -1,4 +1,88 @@
 # python_labs
+## Лабораторная работа 4
+
+### Задание A
+```python
+import csv
+from pathlib import Path
+from typing import Iterable, Sequence
+def read_text(path: str | Path, encoding: str = "utf-8") -> str:
+    try:
+        return Path(path).read_text(encoding=encoding)
+    except FileNotFoundError:
+        return "Такого файла нету"
+    except UnicodeDecodeError:
+        return "Неудалось изменить кодировку"
+
+def write_csv(rows: list[tuple | list], path: str | Path, header: tuple[str, ...] | None = None) -> None:
+    p = Path(path)
+    with p.open('w', newline="", encoding="utf-8") as file:
+        f = csv.writer(file)   
+        if header is None and rows == []:
+            file_c.writerow(('a', 'b'))
+        if header is not None:
+            f.writerow(header)
+        if rows != []:
+            const = len(rows[0])
+            for i in rows:
+                if len(i) != const:
+                    return ValueError
+        f.writerows(rows)
+
+def ensure_parent_dir(path: str | Path) -> None:
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+
+print(read_text(r"/Users/marinaujmanova/Desktop/python_labs/src/lab04/data/input.txt"))
+write_csv([("word","count"),("test",3)], r"/Users/marinaujmanova/Desktop/python_labs/src/lab04/data/check.csv")
+```
+![exA1](./img/lab04/exA1_img.png)
+![exA2](./img/lab04/exA2_img.png)
+
+
+
+
+### Задание B
+```python
+from io_txt_csv import read_text, write_csv, ensure_parent_dir
+import sys
+from pathlib import Path
+
+sys.path.append(r'Users/marinaujmanova/Desktop/python_labs/src/lab04/lib')
+
+from lib.text import *
+
+def exist_path(path_f: str):
+    return Path(path_f).exists()
+
+
+def main(file: str, encoding: str = 'utf-8'):
+    if not exist_path(file):
+        raise FileNotFoundError
+    
+    file_path = Path(file)
+    text = read_text(file, encoding=encoding)
+    norm = normalize(text)
+    tokens = tokenize(norm)
+    freq_dict = count_freq(tokens)
+    top = top_n(freq_dict, 5)
+    top_sort = sorted(top, key=lambda x: (x[1], x[0]), reverse=True)
+    report_path = file_path.parent / 'report.csv'
+    write_csv(top_sort, report_path, header=('word', 'count'))
+    
+    print(f'Всего слов: {len(tokens)}')
+    print(f'Уникальных слов: {len(freq_dict)}')
+    print('Топ-5:')
+    for cursor in top_sort:
+        print(f'{cursor[0]}: {cursor[-1]}')
+
+
+main(r'/Users/marinaujmanova/Desktop/python_labs/src/lab04/data/input.txt')
+```
+![exB1](./img/lab04/exB1_img.png)
+![exB2](./img/lab04/exB2_img.png)
+
+
+
 ## Лабораторная работа 1
 
 ### Задание 1
@@ -298,61 +382,79 @@ if name == "__main__":
 
 ### Задание A
 ```python
-from csv import writer
+import csv
 from pathlib import Path
+from typing import Iterable, Sequence
+def read_text(path: str | Path, encoding: str = "utf-8") -> str:
+    try:
+        return Path(path).read_text(encoding=encoding)
+    except FileNotFoundError:
+        return "Такого файла нету"
+    except UnicodeDecodeError:
+        return "Неудалось изменить кодировку"
 
-def read_text(path: str, encoding: str = "utf-8") -> str:
-    return Path(path).read_text(encoding=encoding)
+def write_csv(rows: list[tuple | list], path: str | Path, header: tuple[str, ...] | None = None) -> None:
+    p = Path(path)
+    with p.open('w', newline="", encoding="utf-8") as file:
+        f = csv.writer(file)   
+        if header is None and rows == []:
+            file_c.writerow(('a', 'b'))
+        if header is not None:
+            f.writerow(header)
+        if rows != []:
+            const = len(rows[0])
+            for i in rows:
+                if len(i) != const:
+                    return ValueError
+        f.writerows(rows)
 
-def write_csv(rows: list, path: str, header: tuple = None) -> None:
+def ensure_parent_dir(path: str | Path) -> None:
     Path(path).parent.mkdir(parents=True, exist_ok=True)
-    
-    with open(path, 'w', newline='', encoding='utf-8') as f:
-        w = writer(f)
-        if header:
-            w.writerow(header)
-        w.writerows(rows)
+
+print(read_text(r"/Users/marinaujmanova/Desktop/python_labs/src/lab04/data/input.txt"))
+write_csv([("word","count"),("test",3)], r"/Users/marinaujmanova/Desktop/python_labs/src/lab04/data/check.csv")
 ```
+![exA1](./img/lab04/exA1_img.png)
+![exA2](./img/lab04/exA2_img.png)
+
 
 
 ### Задание B
 ```python
+from io_txt_csv import read_text, write_csv, ensure_parent_dir
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.append(r'Users/marinaujmanova/Desktop/python_labs/src/lab04/lib')
 
-from lab04.io_txt_csv import read_text, write_csv
-from lib.text import normalize, tokenize, count_freq, top_n
+from lib.text import *
 
-def validate_output_file(filename):
-    path = Path(filename)
-    if path.suffix.lower() != '.csv':
-        raise ValueError()
+def exist_path(path_f: str):
+    return Path(path_f).exists()
 
-def main():
-    input_file = "src/data/lab04/input.txt"  
-    output_file = "src/data/lab04/report.csv"  
+
+def main(file: str, encoding: str = 'utf-8'):
+    if not exist_path(file):
+        raise FileNotFoundError
     
-    try:
-        text = read_text(input_file)
-        freq = count_freq(tokenize(normalize(text)))
-        write_csv(sorted(freq.items(), key=lambda x: (-x[1], x[0])), 
-                 output_file, header=("word", "count"))
-        
-        print(f"Отчёт сохранён: {output_file}")
-        print(f"Всего слов: {sum(freq.values())}")
-        print(f"Уникальных слов: {len(freq)}")
-        print("Топ-5:", *[f"{w}:{c}" for w, c in top_n(freq, 5)])
-        
-    except FileNotFoundError:
-        print(f"Файл {input_file} не найден")
-        sys.exit(1)
-    except Exception as e:
-        print(f"Ошибка: {e}")
-        sys.exit(1)
+    file_path = Path(file)
+    text = read_text(file, encoding=encoding)
+    norm = normalize(text)
+    tokens = tokenize(norm)
+    freq_dict = count_freq(tokens)
+    top = top_n(freq_dict, 5)
+    top_sort = sorted(top, key=lambda x: (x[1], x[0]), reverse=True)
+    report_path = file_path.parent / 'report.csv'
+    write_csv(top_sort, report_path, header=('word', 'count'))
+    
+    print(f'Всего слов: {len(tokens)}')
+    print(f'Уникальных слов: {len(freq_dict)}')
+    print('Топ-5:')
+    for cursor in top_sort:
+        print(f'{cursor[0]}: {cursor[-1]}')
 
-if __name__ == "__main__":
-    main()
+
+main(r'/Users/marinaujmanova/Desktop/python_labs/src/lab04/data/input.txt')
 ```
-
+![exB1](./img/lab04/exB1_img.png)
+![exB2](./img/lab04/exB2_img.png)
