@@ -11,6 +11,8 @@ def read_text(path: str | Path, encoding: str = "utf-8") -> str:
 
 def write_csv(rows: list[tuple | list], path: str | Path, header: tuple[str, ...] | None = None) -> None:
     p = Path(path)
+    if p.suffix.lower() != ".csv":
+        raise ValueError 
     with p.open('w', newline="", encoding="utf-8") as file:
         f = csv.writer(file)   
         if header is None and rows == []:
@@ -21,11 +23,11 @@ def write_csv(rows: list[tuple | list], path: str | Path, header: tuple[str, ...
             const = len(rows[0])
             for i in rows:
                 if len(i) != const:
-                    return ValueError
+                    raise ValueError
         f.writerows(rows)
 
 def ensure_parent_dir(path: str | Path) -> None:
     Path(path).parent.mkdir(parents=True, exist_ok=True)
 
 print(read_text(r"/Users/marinaujmanova/Desktop/python_labs/src/lab04/data/input.txt"))
-write_csv([("word","count"),("test",3)], r"/Users/marinaujmanova/Desktop/python_labs/src/lab04/data/check.csv")
+write_csv([("word","count"),("test",3)], r"/Users/marinaujmanova/Desktop/python_labs/src/lab04/data/check.json")
