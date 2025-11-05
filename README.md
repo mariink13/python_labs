@@ -81,60 +81,111 @@ main(r'/Users/marinaujmanova/Desktop/python_labs/src/lab04/data/input.txt')
 ![exb1](./img/lab04/exb1_img.png)
 ![exB2](./img/lab04/exB2_img.png)
 
-
-
-## Лабораторная работа 1
+## Лабораторная работа 3
 
 ### Задание 1
 ```python
-name=str(input("Имя: "))
-age=int(input("Возраст: "))
-
-print("Привет, " + name + "! Через год тебе будет " + str(age + 1) + ".")
+def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
+    if text is None:
+        raise ValueError
+    if not isinstance(text, str):
+        raise TypeError
+    if len(text) == 0:
+        return "" 
+    if casefold:
+        text= text.casefold()
+    if yo2e:
+        text=text.replace('ё', 'е').replace('Ё','Е')
+    text=text.replace('\t', ' ').replace('\r', ' ').replace('\n', ' ')
+    while '  ' in text:
+        text=text.replace('  ', ' ')
+    text= text.strip()
+    return text
+print(normalize("ПрИвЕт\nМИр\t"))
+print(normalize("ёжик, Ёлка")) 
+print(normalize("Hello\r\nWorld"))
+print(normalize("  двойные   пробелы  "))
 ```
-![ex01](./img/lab01/ex01_img.png)
+![ex01](./img/lab03/ex01_img.png)
 
 ### Задание 2
 ```python
-a = float(input('a: ').replace(',','.'))
-b = float(input('b: ').replace(',','.'))
-print(f"sum={round(a+b,2)}; avg={round((a+b)/2,2)}")
+import re
+def tokenize(text: str) -> list[str]:
+    reg = r'\w+(?:-\w+)*'
+    text = re.findall(reg, text)
+    return text
+print(tokenize("привет мир"))
+print(tokenize("hello,world!!!"))
+print(tokenize("по-настоящему круто"))
+print(tokenize("2025 год"))
+print(tokenize("emoji 😀 не слово"))
 ```
 
-![ex02](./img/lab01/ex02_img.png)
+![ex02](./img/lab03/ex02_img.png)
 
 ### Задание 3
 ```python
-price=int(input())
-discount=int(input())
-vat=float(input())
-base= price * (1 - discount/100)
-vat_amount = base * (vat/100)
-total= base + vat_amount
-print("База после скидки:", base)
-print("НДС:", vat_amount)
-print("Итого к оплате:",total)
+def count_freq(tokens: list[str]) -> dict[str, int]:
+    freq_dict = {}
+    if not tokens:
+        return {}
+    for token in tokens:
+        freq_dict[token] = freq_dict.get(token, 0) +1
+    return freq_dict
+print(count_freq(["a","b","a","c","b","a"]))
+print(count_freq(["bb","aa","bb","aa","cc"]))
 ```
-![ex03](./img/lab01/ex03_img.png)
+![ex03](./img/lab03/ex03_img.png)
 
 ### Задание 4
 ```python
-m=int(input("Минуты: "))
-h=m//60
-m1=m%60
-print(f"{h}:{m1:02d}")
+def top_n(freq: dict[str, int], n: int = 5) -> list[tuple[str, int]]:
+    if not freq:
+        return []
+    items = list(freq.items())
+    items.sort(key=lambda x: x[0])           # Сортировка по слову A→Z
+    items.sort(key=lambda x: x[1], reverse=True)  # Сортировка по частоте 9→0
+    return items[:n]
+freq1 = {"a": 3, "b": 2, "c": 1}
+print(top_n(freq1, 2))
+freq2 = {"bb": 2, "aa": 2, "cc": 1}
+print(top_n(freq2, 2))
 ```
-![ex04](./img/lab01/ex04_img.png)
+![ex04](./img/lab03/ex04_img.png)
 
-### Задание 5
+### Задание B
 ```python
-sec, fir, thr = map(str, input("ФИО: ").split())
-print(f'Инициалы: {sec[0] + fir[0] + thr[0]}')
-print(f'Длина(символы): {2+len(fir) + len(thr) + len(sec)}')
 
+import sys
+from lib.e11_tex_stats import normalize, tokenize, count_freq, top_n
+def main():
+    text = sys.stdin.buffer.read().decode('utf-8') #вход к бинарным данным,преобразует строку в юникод
+    if not text.strip():
+        raise ValueError('Нет текста :(')
+    normalized_text = normalize(text)
+    tokens = tokenize(normalized_text)
+    
+
+    if not tokens:
+        print("В тексте не найдено слов")
+        raise ValueError
+
+    total_words = len(tokens) # общее количество слов
+    freq_dict = count_freq(tokens) # словарь частот
+    unique_words = len(freq_dict) # количеситво уникальных слов 
+    top_words = top_n(freq_dict, 5) # самые популярные частоты
+    
+    print(f"Всего слов: {total_words}")
+    print(f"Уникальных слов: {unique_words}")
+    print("Топ-5:")
+    for word, count in top_words:
+        print(f"{word}: {count}")
+
+
+if name == "__main__":  
+    main()
 ```
-![ex05](./img/lab01/ex05_img.png)
-
 
 ## Лабораторная работа 2
 
@@ -271,190 +322,59 @@ print(format_record(("Иванов Иван Иванович","BIVT-25")))
 ```
 ![ex07](./img/lab02/ex07_img.png)
 
-## Лабораторная работа 3
+
+
+
+## Лабораторная работа 1
 
 ### Задание 1
 ```python
-def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
-    if text is None:
-        raise ValueError
-    if not isinstance(text, str):
-        raise TypeError
-    if len(text) == 0:
-        return "" 
-    if casefold:
-        text= text.casefold()
-    if yo2e:
-        text=text.replace('ё', 'е').replace('Ё','Е')
-    text=text.replace('\t', ' ').replace('\r', ' ').replace('\n', ' ')
-    while '  ' in text:
-        text=text.replace('  ', ' ')
-    text= text.strip()
-    return text
-print(normalize("ПрИвЕт\nМИр\t"))
-print(normalize("ёжик, Ёлка")) 
-print(normalize("Hello\r\nWorld"))
-print(normalize("  двойные   пробелы  "))
+name=str(input("Имя: "))
+age=int(input("Возраст: "))
+
+print("Привет, " + name + "! Через год тебе будет " + str(age + 1) + ".")
 ```
-![ex01](./img/lab03/ex01_img.png)
+![ex01](./img/lab01/ex01_img.png)
 
 ### Задание 2
 ```python
-import re
-def tokenize(text: str) -> list[str]:
-    reg = r'\w+(?:-\w+)*'
-    text = re.findall(reg, text)
-    return text
-print(tokenize("привет мир"))
-print(tokenize("hello,world!!!"))
-print(tokenize("по-настоящему круто"))
-print(tokenize("2025 год"))
-print(tokenize("emoji 😀 не слово"))
+a = float(input('a: ').replace(',','.'))
+b = float(input('b: ').replace(',','.'))
+print(f"sum={round(a+b,2)}; avg={round((a+b)/2,2)}")
 ```
 
-![ex02](./img/lab03/ex02_img.png)
+![ex02](./img/lab01/ex02_img.png)
 
 ### Задание 3
 ```python
-def count_freq(tokens: list[str]) -> dict[str, int]:
-    freq_dict = {}
-    if not tokens:
-        return {}
-    for token in tokens:
-        freq_dict[token] = freq_dict.get(token, 0) +1
-    return freq_dict
-print(count_freq(["a","b","a","c","b","a"]))
-print(count_freq(["bb","aa","bb","aa","cc"]))
+price=int(input())
+discount=int(input())
+vat=float(input())
+base= price * (1 - discount/100)
+vat_amount = base * (vat/100)
+total= base + vat_amount
+print("База после скидки:", base)
+print("НДС:", vat_amount)
+print("Итого к оплате:",total)
 ```
-![ex03](./img/lab03/ex03_img.png)
+![ex03](./img/lab01/ex03_img.png)
 
 ### Задание 4
 ```python
-def top_n(freq: dict[str, int], n: int = 5) -> list[tuple[str, int]]:
-    if not freq:
-        return []
-    items = list(freq.items())
-    items.sort(key=lambda x: x[0])           # Сортировка по слову A→Z
-    items.sort(key=lambda x: x[1], reverse=True)  # Сортировка по частоте 9→0
-    return items[:n]
-freq1 = {"a": 3, "b": 2, "c": 1}
-print(top_n(freq1, 2))
-freq2 = {"bb": 2, "aa": 2, "cc": 1}
-print(top_n(freq2, 2))
+m=int(input("Минуты: "))
+h=m//60
+m1=m%60
+print(f"{h}:{m1:02d}")
 ```
-![ex04](./img/lab03/ex04_img.png)
+![ex04](./img/lab01/ex04_img.png)
 
-### Задание B
+### Задание 5
 ```python
+sec, fir, thr = map(str, input("ФИО: ").split())
+print(f'Инициалы: {sec[0] + fir[0] + thr[0]}')
+print(f'Длина(символы): {2+len(fir) + len(thr) + len(sec)}')
 
-import sys
-from lib.e11_tex_stats import normalize, tokenize, count_freq, top_n
-def main():
-    text = sys.stdin.buffer.read().decode('utf-8') #вход к бинарным данным,преобразует строку в юникод
-    if not text.strip():
-        raise ValueError('Нет текста :(')
-    normalized_text = normalize(text)
-    tokens = tokenize(normalized_text)
-    
-
-    if not tokens:
-        print("В тексте не найдено слов")
-        raise ValueError
-
-    total_words = len(tokens) # общее количество слов
-    freq_dict = count_freq(tokens) # словарь частот
-    unique_words = len(freq_dict) # количеситво уникальных слов 
-    top_words = top_n(freq_dict, 5) # самые популярные частоты
-    
-    print(f"Всего слов: {total_words}")
-    print(f"Уникальных слов: {unique_words}")
-    print("Топ-5:")
-    for word, count in top_words:
-        print(f"{word}: {count}")
-
-
-if name == "__main__":  
-    main()
 ```
+![ex05](./img/lab01/ex05_img.png)
 
 
-## Лабораторная работа 4
-
-### Задание A
-```python
-import csv
-from pathlib import Path
-from typing import Iterable, Sequence
-def read_text(path: str | Path, encoding: str = "utf-8") -> str:
-    try:
-        return Path(path).read_text(encoding=encoding)
-    except FileNotFoundError:
-        return "Такого файла нету"
-    except UnicodeDecodeError:
-        return "Неудалось изменить кодировку"
-
-def write_csv(rows: list[tuple | list], path: str | Path, header: tuple[str, ...] | None = None) -> None:
-    p = Path(path)
-    with p.open('w', newline="", encoding="utf-8") as file:
-        f = csv.writer(file)   
-        if header is None and rows == []:
-            file_c.writerow(('a', 'b'))
-        if header is not None:
-            f.writerow(header)
-        if rows != []:
-            const = len(rows[0])
-            for i in rows:
-                if len(i) != const:
-                    return ValueError
-        f.writerows(rows)
-
-def ensure_parent_dir(path: str | Path) -> None:
-    Path(path).parent.mkdir(parents=True, exist_ok=True)
-
-print(read_text(r"/Users/marinaujmanova/Desktop/python_labs/src/lab04/data/input.txt"))
-write_csv([("word","count"),("test",3)], r"/Users/marinaujmanova/Desktop/python_labs/src/lab04/data/check.csv")
-```
-![exA1](./img/lab04/exA1_img.png)
-![exA2](./img/lab04/exA2_img.png)
-
-
-
-### Задание B
-```python
-from io_txt_csv import read_text, write_csv, ensure_parent_dir
-import sys
-from pathlib import Path
-
-sys.path.append(r'Users/marinaujmanova/Desktop/python_labs/src/lab04/lib')
-
-from lib.text import *
-
-def exist_path(path_f: str):
-    return Path(path_f).exists()
-
-
-def main(file: str, encoding: str = 'utf-8'):
-    if not exist_path(file):
-        raise FileNotFoundError
-    
-    file_path = Path(file)
-    text = read_text(file, encoding=encoding)
-    norm = normalize(text)
-    tokens = tokenize(norm)
-    freq_dict = count_freq(tokens)
-    top = top_n(freq_dict, 5)
-    top_sort = sorted(top, key=lambda x: (x[1], x[0]), reverse=True)
-    report_path = file_path.parent / 'report.csv'
-    write_csv(top_sort, report_path, header=('word', 'count'))
-    
-    print(f'Всего слов: {len(tokens)}')
-    print(f'Уникальных слов: {len(freq_dict)}')
-    print('Топ-5:')
-    for cursor in top_sort:
-        print(f'{cursor[0]}: {cursor[-1]}')
-
-
-main(r'/Users/marinaujmanova/Desktop/python_labs/src/lab04/data/input.txt')
-```
-![exB1](./img/lab04/exB1_img.png)
-![exB2](./img/lab04/exB2_img.png)
