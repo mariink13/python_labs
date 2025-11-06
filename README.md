@@ -1,6 +1,6 @@
 # python_labs
 
-## Лабораторная работа 4
+## Лабораторная работа 5
 
 ### Задание A
 ```python
@@ -90,9 +90,14 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
 json_to_csv("/Users/marinaujmanova/Desktop/python_labs/src/data/samples/people.json", "/Users/marinaujmanova/Desktop/python_labs/src/data/out/people_from_json.csv")
 csv_to_json("/Users/marinaujmanova/Desktop/python_labs/src/data/samples/people.csv", "/Users/marinaujmanova/Desktop/python_labs/src/data/out/people_from_csv.json")
 ```
-![exA1](./img/lab04/exA1_img.png)
-![exA2](./img/lab04/exA2_img.png)
 
+### Входные данные
+![exAf](./img/lab05/exAf.png)
+![exAfi](./img/lab05/exAfi.png)
+
+### Выходные данные
+![exAex](./img/lab05/exAex.png)
+![exAex2](./img/lab05/exAex2.png)
 
 
 
@@ -163,9 +168,13 @@ def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None:
     
 csv_to_xlsx("/Users/marinaujmanova/Desktop/python_labs/src/data/samples/people.csv", "/Users/marinaujmanova/Desktop/python_labs/src/data/out/people.xlsx")
 ```
-![exb1](./img/lab04/exb1_img.png)
-![exB2](./img/lab04/exB2_img.png)
 
+### Входные данные
+![exAf](./img/lab05/exAf.png)
+
+
+### Выходные данные
+![exB2](./img/lab04/exB2_img.png)
 
 
 ## Лабораторная работа 4
