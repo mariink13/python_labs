@@ -174,7 +174,7 @@ csv_to_xlsx("/Users/marinaujmanova/Desktop/python_labs/src/data/samples/people.c
 
 
 ### Выходные данные
-![exB2](./img/lab04/exB2_img.png)
+![exB](./img/lab05/exB.png)
 
 
 ## Лабораторная работа 4
