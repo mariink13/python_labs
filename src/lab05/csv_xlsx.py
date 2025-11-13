@@ -61,4 +61,4 @@ def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None:
     except Exception as e:
         raise ValueError(f"Ошибка создания XLSX: {e}")
     
-csv_to_xlsx("/Users/marinaujmanova/Desktop/python_labs/src/data/samples/people.csv", "/Users/marinaujmanova/Desktop/python_labs/src/data/out/people.xlsx")
+csv_to_xlsx("src/data/samples/people.csv", "src/data/out/people.xlsx")

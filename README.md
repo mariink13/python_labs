@@ -87,8 +87,8 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
     except Exception as e:
         raise ValueError(f"Ошибка записи JSON: {e}")
 
-json_to_csv("/Users/marinaujmanova/Desktop/python_labs/src/data/samples/people.json", "/Users/marinaujmanova/Desktop/python_labs/src/data/out/people_from_json.csv")
-csv_to_json("/Users/marinaujmanova/Desktop/python_labs/src/data/samples/people.csv", "/Users/marinaujmanova/Desktop/python_labs/src/data/out/people_from_csv.json")
+json_to_csv("src/data/samples/people.json", "/src/data/out/people_from_json.csv")
+csv_to_json("src/data/samples/people.csv", "src/data/out/people_from_csv.json")
 ```
 
 ### Входные данные
@@ -166,7 +166,7 @@ def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None:
     except Exception as e:
         raise ValueError(f"Ошибка создания XLSX: {e}")
     
-csv_to_xlsx("/Users/marinaujmanova/Desktop/python_labs/src/data/samples/people.csv", "/Users/marinaujmanova/Desktop/python_labs/src/data/out/people.xlsx")
+csv_to_xlsx("src/data/samples/people.csv", "src/data/out/people.xlsx")
 ```
 
 ### Входные данные
