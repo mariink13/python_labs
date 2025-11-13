@@ -2,11 +2,16 @@ import json
 import csv
 from pathlib import Path
 
+def ensure_relative(path: Path) -> None:
+    if path.is_absolute():
+        raise ValueError("Путь должен быть относительным")
 
 def json_to_csv(json_path: str, csv_path: str) -> None:
 
     json_file = Path(json_path)
     csv_file = Path(csv_path)
+    ensure_relative(json_path)
+    ensure_relative(csv_path)
     
     if not json_file.exists():
         raise FileNotFoundError(f"Файл {json_path} не найден")
