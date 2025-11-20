@@ -10,8 +10,8 @@ def json_to_csv(json_path: str, csv_path: str) -> None:
 
     json_file = Path(json_path)
     csv_file = Path(csv_path)
-    ensure_relative(json_path)
-    ensure_relative(csv_path)
+    ensure_relative(json_file)
+    ensure_relative(csv_file)
     
     if not json_file.exists():
         raise FileNotFoundError(f"Файл {json_path} не найден")
@@ -86,5 +86,5 @@ def csv_to_json(csv_path: str, json_path: str) -> None:
     except Exception as e:
         raise ValueError(f"Ошибка записи JSON: {e}")
 
-json_to_csv("src/data/samples/people.json", "/src/data/out/people_from_json.csv")
+json_to_csv("src/data/samples/people.json", "src/data/out/people_from_json.csv")
 csv_to_json("src/data/samples/people.csv", "src/data/out/people_from_csv.json")
