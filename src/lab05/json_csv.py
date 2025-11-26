@@ -2,89 +2,69 @@ import json
 import csv
 from pathlib import Path
 
-def ensure_relative(path: Path) -> None:
-    if path.is_absolute():
-        raise ValueError("Путь должен быть относительным")
 
-def json_to_csv(json_path: str, csv_path: str) -> None:
+def json_to_csv(src_path: str, dst_path: str) -> None:
+    """Конвертирует JSON файл в CSV."""
+    src = Path(src_path)
+    dst = Path(dst_path)
 
-    json_file = Path(json_path)
-    csv_file = Path(csv_path)
-    ensure_relative(json_file)
-    ensure_relative(csv_file)
-    
-    if not json_file.exists():
-        raise FileNotFoundError(f"Файл {json_path} не найден")
-    
-    if json_file.suffix.lower() != '.json':
-        raise ValueError("Неверный тип файла. Ожидается .json")
-    
-    try:
-        with json_file.open('r', encoding='utf-8') as f:
+    if not src.exists():
+        raise FileNotFoundError(f"Файл {src_path} не найден")
+
+    # Читаем JSON
+    with open(src, "r", encoding="utf-8") as f:
+        try:
             data = json.load(f)
-    except json.JSONDecodeError as e:
-        raise ValueError(f"Ошибка чтения JSON: {e}")
-    
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Некорректный JSON: {e}")
+
     if not data:
-        raise ValueError("Пустой JSON или неподдерживаемая структура")
-    
-    if not isinstance(data, list):
-        raise ValueError("JSON должен содержать список объектов")
-    
-    if not all(isinstance(item, dict) for item in data):
-        raise ValueError("Все элементы JSON должны быть словарями")
-    
+        raise ValueError("JSON файл пуст")
+
+    # Получаем все возможные ключи
     all_keys = set()
     for item in data:
+        if not isinstance(item, dict):
+            raise ValueError("JSON должен содержать массив объектов")
         all_keys.update(item.keys())
 
-    if data:
-        first_item_keys = list(data[0].keys())
-        remaining_keys = sorted(all_keys - set(first_item_keys))
-        fieldnames = first_item_keys + remaining_keys
-    else:
-        fieldnames = sorted(all_keys)
-    # Запись в CSV
-    try:
-        with csv_file.open('w', newline='', encoding='utf-8') as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
+    # Записываем CSV
+    with open(dst, "w", encoding="utf-8", newline="") as f:
+        if all_keys:
+            writer = csv.DictWriter(f, fieldnames=sorted(all_keys))
             writer.writeheader()
-            for row in data:
-                complete_row = {key: row.get(key, '') for key in fieldnames}
-                writer.writerow(complete_row)
-    except Exception as e:
-        raise ValueError(f"Ошибка записи CSV: {e}")
+            writer.writerows(data)
 
-def csv_to_json(csv_path: str, json_path: str) -> None:
-  
-    csv_file = Path(csv_path)
-    json_file = Path(json_path)
-    
-    if not csv_file.exists():
-        raise FileNotFoundError(f"Файл {csv_path} не найден")
 
-    if csv_file.suffix.lower() != '.csv':
-        raise ValueError("Неверный тип файла. Ожидается .csv")
-    
-    try:
-        with csv_file.open('r', encoding='utf-8') as f:
+def csv_to_json(src_path: str, dst_path: str) -> None:
+    """Конвертирует CSV файл в JSON."""
+    src = Path(src_path)
+    dst = Path(dst_path)
+
+    if not src.exists():
+        raise FileNotFoundError(f"Файл {src_path} не найден")
+
+    # Читаем CSV
+    data = []
+    with open(src, "r", encoding="utf-8") as f:
+        try:
             reader = csv.DictReader(f)
-            if reader.fieldnames is None:
-                raise ValueError("CSV файл не содержит заголовка")
-            
-            data = list(reader)
-            
-    except Exception as e:
-        raise ValueError(f"Ошибка чтения CSV: {e}")
+            for row in reader:
+                # Конвертируем числовые значения
+                processed_row = {}
+                for key, value in row.items():
+                    # Проверяем что value не None и является цифрой
+                    if value is not None and value.isdigit():
+                        processed_row[key] = int(value)
+                    else:
+                        processed_row[key] = value
+                data.append(processed_row)
+        except csv.Error as e:
+            raise ValueError(f"Некорректный CSV: {e}")
 
     if not data:
-        raise ValueError("Пустой CSV файл")
+        raise ValueError("CSV файл пуст")
 
-    try:
-        with json_file.open('w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
-    except Exception as e:
-        raise ValueError(f"Ошибка записи JSON: {e}")
-
-json_to_csv("src/data/samples/people.json", "src/data/out/people_from_json.csv")
-csv_to_json("src/data/samples/people.csv", "src/data/out/people_from_csv.json")
+    # Записываем JSON
+    with open(dst, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)

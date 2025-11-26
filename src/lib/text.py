@@ -1,46 +1,50 @@
 import re
-from typing import Dict, List, Tuple
 from collections import Counter
 
-def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
-    result = text
-    
-    if casefold:
-        result = result.casefold()    
-    if yo2e:
-        result = result.replace('ё', 'е').replace('Ё', 'е')
-    
-    for char in ['\t', '\r', '\n']:
-        result = result.replace(char, ' ')
-    
-    result = re.sub(r'\s+', ' ', result).strip()
-    return result
 
-def tokenize(text: str) -> List[str]:
-    pattern = r'\w+(?:-\w+)*'
-    tokens = re.findall(pattern, text)
-    return tokens
+def normalize(text: str) -> str:
+    """Приводит текст к нижнему регистру и нормализует пробелы."""
+    if not text:
+        return ""
 
-def count_freq(tokens: List[str]) -> Dict[str, int]:
-    return Counter(tokens)
+    # Приводим к нижнему регистру, сохраняя букву "ё"
+    text = text.lower()
 
-def top_n(freq: Dict[str, int], n: int = 5) -> List[Tuple[str, int]]:
-    items = list(freq.items())
-    sorted_items = sorted(items, key=lambda x: (-x[1], x[0]))
-    return sorted_items[:n]
+    # Заменяем все пробельные символы на обычные пробелы
+    text = re.sub(r"\s+", " ", text)
 
-if __name__ == "__main__":
-    test_text = "Привет, мир! Привет!!! Тест-тест проверка."
-    print("Исходный текст:", test_text)
-    
-    norm_text = normalize(test_text)
-    print("Нормализованный:", norm_text)
-    
-    tokens = tokenize(norm_text)
-    print("Токены:", tokens)
-    
-    freq = count_freq(tokens)
-    print("Частоты:", freq)
-    
-    top_3 = top_n(freq, 3)
-    print("Топ-3:", top_3)
+    # Убираем пробелы в начале и конце
+    return text.strip()
+
+
+def tokenize(text: str) -> list[str]:
+    """Разбивает текст на слова (токены)."""
+    if not text:
+        return []
+
+    # Используем регулярное выражение для извлечения слов (включая цифры и дефисы)
+    tokens = re.findall(r"\b[\w-]+\b", text, re.IGNORECASE)
+
+    # Приводим все токены к нижнему регистру для консистентности
+    return [token.lower() for token in tokens]
+
+
+def count_freq(tokens: list[str]) -> dict[str, int]:
+    """Подсчитывает частоту слов."""
+    if not tokens:
+        return {}
+
+    # Приводим все токены к нижнему регистру для case-insensitive подсчета
+    lower_tokens = [token.lower() for token in tokens]
+    return dict(Counter(lower_tokens))
+
+
+def top_n(freq: dict[str, int], n: int) -> list[tuple[str, int]]:
+    """Возвращает n самых частых слов с их частотами."""
+    if not freq or n <= 0:
+        return []
+
+    # Сортируем по убыванию частоты, при равной частоте - по алфавиту
+    sorted_items = sorted(freq.items(), key=lambda x: (-x[1], x[0]))
+
+    return sorted_items[:n] if n > 0 else []
