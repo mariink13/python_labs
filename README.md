@@ -396,6 +396,8 @@ python -m pytest tests/test_json_csv.py -v
 ```
 ![json_csv.py](./img/lab07/json_csv.py.png)
 
+### Проверка покрытости
+
 ```python
 python -m pytest --cov=src --cov-report=term-missing
 ```
