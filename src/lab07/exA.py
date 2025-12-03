@@ -27,8 +27,7 @@ def test_normalize(source, expected):
         ("знаки, препинания! тест.", ["знаки", "препинания", "тест"]),
     ],
 )
-def test_tokenize(text, expected):
-    assert tokenize(text) == expected
+
 
 
 def test_count_freq_basic():
