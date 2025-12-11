@@ -4,7 +4,7 @@ from datetime import datetime, date
 
 
 @dataclass
-class Student:
+class Student: 
     fio: str
     birthdate: str 
     group: str

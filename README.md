@@ -113,10 +113,10 @@ found = g.find("те")  # ищем по подстроке
 print_students("Поиск 'те':", found)
 
 g.update("Иванов Иван Иванович", gpa=4.1, group="БИВТ-25-6")
-print_students("После обновления данных Петрова:", g.list())
+print_students("После обновления данных Иванова:", g.list())
 
 g.remove("Гадалова Валентина Никитовна")
-print_students("После удаления Сидоровой:", g.list())
+print_students("После удаления Гадаловой:", g.list())
 
 ```
 
