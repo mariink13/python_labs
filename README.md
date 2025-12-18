@@ -1,6 +1,389 @@
 # python_labs
 
 
+## Лабораторная работа 10
+
+### A.Реализация Stack и Queue
+```python
+from collections import deque
+from typing import Any, Optional
+
+class Stack:
+    # LIFO структура - последний вошел, первый вышел
+    def __init__(self, iterable=None):
+        self._data = list(iterable) if iterable else []
+    
+    def push(self, item: Any) -> None:
+        # Добавить на вершину стека
+        self._data.append(item)
+    
+    def pop(self) -> Any:
+        # Снять верхний элемент
+        if not self._data:
+            raise IndexError("Стек пуст")
+        return self._data.pop()
+    
+    def peek(self) -> Optional[Any]:
+        # Посмотреть верхний элемент без удаления
+        return self._data[-1] if self._data else None
+    
+    def is_empty(self) -> bool:
+        # Проверка на пустоту
+        return not self._data
+    
+    def __len__(self) -> int:
+        # Количество элементов
+        return len(self._data)
+    
+    def __str__(self) -> str:
+        return f"Stack({self._data})"
+
+
+class Queue:
+    # FIFO структура - первый вошел, первый вышел
+    def __init__(self, iterable=None):
+        self._data = deque(iterable) if iterable else deque()
+    
+    def enqueue(self, item: Any) -> None:
+        # Добавить в конец очереди
+        self._data.append(item)
+    
+    def dequeue(self) -> Any:
+        # Взять из начала очереди
+        if not self._data:
+            raise IndexError("Очередь пуста")
+        return self._data.popleft()
+    
+    def peek(self) -> Optional[Any]:
+        # Посмотреть первый элемент
+        return self._data[0] if self._data else None
+    
+    def is_empty(self) -> bool:
+        # Проверка на пустоту
+        return not self._data
+    
+    def __len__(self) -> int:
+        # Количество элементов
+        return len(self._data)
+    
+    def __str__(self) -> str:
+        return f"Queue({list(self._data)})"
+
+
+
+print('Stack')
+
+stack = Stack([1,2,3,4])
+print(f'Снятие верхнего элемента стека : {stack.pop()}')
+print(f'Пустой ли стек? {stack.is_empty()}')
+print(f'Число сверху : {stack.peek()}')
+stack.push(1)
+print(f'Значение сверху после добавления числа в стек : {stack.peek()}')
+print(f'Длина стека : {len(stack)}')
+print(f'Стек : {stack._data}')
+
+print('Deque')
+
+q = Queue([1,2,3,4])
+
+print(f'Значение первого эллемента : {q.peek()}')
+q.dequeue()
+print(f'Значение первого эллемента после удаления числа : {q.peek()}')
+q.enqueue(52)
+print(f'Значение первого эллемента после добавления числа : {q.peek()}')
+print(f'Пустая ли очередь? {q.is_empty()}')
+print(f'Количество элементов в очереди : {len(q)}')
+
+```
+### Результат вывода
+
+![struc](./img/lab10/struc.png)
+
+### Реализовать SinglyLinkedList 
+
+```python
+from typing import Any, Optional, Iterator
+
+class Node:
+    # Узел связного списка
+    def __init__(self, value: Any):
+        self.value = value  # Значение узла
+        self.next = None    # Ссылка на следующий узел
+    
+    def __str__(self):
+        return f"Node({self.value})"
+
+
+class SinglyLinkedList:
+    # Односвязный список
+    def __init__(self):
+        self.head = None  # Первый узел
+        self.tail = None  # Последний узел
+        self._size = 0    # Количество элементов
+    
+    def append(self, value: Any) -> None:
+        # Добавить в конец за O(1)
+        new_node = Node(value)
+        
+        if not self.head:  # Если список пуст
+            self.head = new_node
+            self.tail = new_node
+        else:  # Если есть элементы
+            self.tail.next = new_node
+            self.tail = new_node
+        
+        self._size += 1
+    
+    def prepend(self, value: Any) -> None:
+        # Добавить в начало за O(1)
+        new_node = Node(value)
+        
+        if not self.head:
+            self.head = new_node
+            self.tail = new_node
+        else:
+            new_node.next = self.head
+            self.head = new_node
+        
+        self._size += 1
+    
+    def insert(self, idx: int, value: Any) -> None:
+        # Вставить по индексу
+        if idx < 0 or idx > self._size:
+            raise IndexError(f"Индекс {idx} вне диапазона")
+        
+        if idx == 0:
+            self.prepend(value)
+        elif idx == self._size:
+            self.append(value)
+        else:
+            new_node = Node(value)
+            current = self.head
+            
+            # Переходим к узлу перед нужной позицией
+            for _ in range(idx - 1):
+                current = current.next
+            
+            # Вставляем новый узел
+            new_node.next = current.next
+            current.next = new_node
+            self._size += 1
+    
+    def remove(self, value: Any) -> bool:
+        # Удалить по значению
+        if not self.head:
+            return False
+        
+        # Удаление из начала
+        if self.head.value == value:
+            self.head = self.head.next
+            if not self.head:  # Если список стал пустым
+                self.tail = None
+            self._size -= 1
+            return True
+        
+        # Поиск элемента для удаления
+        current = self.head
+        while current.next and current.next.value != value:
+            current = current.next
+        
+        # Элемент не найден
+        if not current.next:
+            return False
+        
+        # Удаление элемента
+        if current.next == self.tail:
+            self.tail = current
+        current.next = current.next.next
+        self._size -= 1
+        return True
+    
+    def remove_at(self, idx: int) -> Any:
+        # Удалить по индексу
+        if idx < 0 or idx >= self._size:
+            raise IndexError(f"Индекс {idx} вне диапазона")
+        
+        # Удаление из начала
+        if idx == 0:
+            value = self.head.value
+            self.head = self.head.next
+            if not self.head:
+                self.tail = None
+            self._size -= 1
+            return value
+        
+        # Поиск узла перед удаляемым
+        current = self.head
+        for _ in range(idx - 1):
+            current = current.next
+        
+        # Удаление
+        value = current.next.value
+        if current.next == self.tail:
+            self.tail = current
+        current.next = current.next.next
+        self._size -= 1
+        return value
+    
+    def __iter__(self) -> Iterator[Any]:
+        # Итератор по значениям
+        current = self.head
+        while current:
+            yield current.value
+            current = current.next
+    
+    def __len__(self) -> int:
+        # Количество элементов
+        return self._size
+    
+    def __str__(self) -> str:
+        # Визуальное представление
+        if not self.head:
+            return "None"
+        
+        parts = []
+        current = self.head
+        while current:
+            parts.append(f"[{current.value}]")
+            current = current.next
+        
+        return " -> ".join(parts) + " -> None"
+
+
+sll = SinglyLinkedList()
+print(f'Длина нашего односвязанного списка : {len(sll)}')
+
+sll.append(1)
+sll.append(2)
+sll.prepend(0)
+print(f'Наша ныняшняя длина списка после добавления эллементов : {len(sll)}') 
+print(f'Односвязаный список : {list(sll)}')
+
+sll.insert(1, 0.5)
+print(f'Длина списка после добавления на 1 индекс числа 0.5 : {len(sll)}')
+print(f'Односвязаный список : {list(sll)}')
+sll.append(52)
+print(f'Односвязанный список после добавления числа в конец : {list(sll)}')
+
+print(sll) 
+
+```
+
+### Результат вывода
+
+![link](./img/lab10/link.png)
+
+
+### Теория
+ #### Стек (Stack)
+Принцип: LIFO — Last In, First Out.
+Операции:
+push(x) — положить элемент сверху;
+pop() — снять верхний элемент;
+peek() — посмотреть верхний, не снимая.
+Типичные применения:
+история действий (undo/redo);
+обход графа/дерева в глубину (DFS);
+парсинг выражений, проверка скобок.
+
+Асимптотика (при реализации на массиве / списке):
+push — O(1) амортизированно;
+pop — O(1);
+peek — O(1);
+проверка пустоты — O(1).
+Очередь (Queue)
+Принцип: FIFO — First In, First Out.
+
+Операции:
+enqueue(x) — добавить в конец;
+dequeue() — взять элемент из начала;
+peek() — посмотреть первый элемент, не удаляя.
+
+Типичные применения:
+обработка задач по очереди (job queue);
+обход графа/дерева в ширину (BFS);
+буферы (сетевые, файловые, очереди сообщений).
+
+В Python:
+обычный list плохо подходит для реализации очереди:
+удаление с начала pop(0) — это O(n) (все элементы сдвигаются);
+collections.deque даёт O(1) операции по краям:
+append / appendleft — O(1);
+pop / popleft — O(1).
+
+Асимптотика (на нормальной очереди):
+enqueue — O(1);
+dequeue — O(1);
+peek — O(1).
+Односвязный список (Singly Linked List)
+
+Структура:
+состоит из узлов Node;
+каждый узел хранит:
+value — значение элемента;
+next — ссылку на следующий узел или None (если это последний).
+
+Основные идеи:
+элементы не хранятся подряд в памяти, как в массиве;
+каждый элемент знает только «следующего соседа».
+
+Плюсы:
+вставка/удаление в начало списка за O(1):
+если есть ссылка на голову (head), достаточно перенаправить одну ссылку;
+при удалении из середины не нужно сдвигать остальные элементы:
+достаточно обновить ссылки узлов;
+удобно использовать как базовый строительный блок для других структур (например, для очередей, стеков, хеш-таблиц с цепочками).
+Минусы:
+
+доступ по индексу i — O(n):
+чтобы добраться до позиции i, нужно пройти i шагов от головы;
+нет быстрого доступа к предыдущему элементу:
+чтобы удалить узел, нужно знать его предыдущий узел → часто нужен дополнительный проход.
+Типичные оценки:
+
+prepend (добавить в начало) — O(1);
+append:
+при наличии tail — O(1),
+без tail — O(n), т.к. требуется пройти до конца;
+поиск по значению — O(n).
+Двусвязный список (Doubly Linked List)
+Структура:
+
+также состоит из узлов DNode;
+каждый узел хранит:
+value — значение элемента;
+next — ссылку на следующий узел;
+prev — ссылку на предыдущий узел.
+Основные идеи:
+
+можно двигаться как вперёд, так и назад по цепочке узлов;
+удобно хранить ссылки на оба конца: head и tail.
+Плюсы по сравнению с односвязным:
+
+удаление узла по ссылке на него — O(1):
+достаточно «вытащить» его, перенастроив prev.next и next.prev;
+не нужно искать предыдущий узел линейным проходом;
+эффективен для структур, где часто нужно удалять/добавлять элементы в середине, имея на них прямые ссылки (например, реализация LRU-кэша);
+можно легко идти в обе стороны:
+прямой и обратный обход списка.
+
+Минусы:
+узел занимает больше памяти:
+нужно хранить две ссылки (prev, next);
+код более сложный:
+легко забыть обновить одну из ссылок и «сломать» структуру;
+сложнее отлаживать.
+
+Типичные оценки (при наличии head и tail):
+вставка/удаление в начале/конце — O(1);
+вставка/удаление по ссылке на узел — O(1);
+доступ по индексу — O(n) (нужно идти от головы или хвоста);
+поиск по значению — O(n).
+
+Пример текстовой визуализации:
+None <- [A] <-> [B] <-> [C] -> None
+
+
 ## Лабораторная работа 9
 
 ### A.Реализация класса Group
